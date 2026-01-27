@@ -126,7 +126,7 @@ jobs:
             echo "❌ No test keys / grep pattern found. Failing run."
             exit 1
           fi
-          npx browserstack-node-sdk playwright test --grep "$GREP_PATTERN"
+          npx browserstack-node-sdk playwright test --grep "${GREP_PATTERN}\\b"
 
       # ----------------------------------------------------
       # 7. Stop BrowserStack Local Tunnel
