@@ -40,16 +40,13 @@ jobs:
         shell: bash
         run: |
           echo "Event name: $GITHUB_EVENT_NAME"
-
-          # Print full event payload for debugging
           echo "----- GitHub Event Payload -----"
           cat "$GITHUB_EVENT_PATH"
           echo "--------------------------------"
 
           if [ "$GITHUB_EVENT_NAME" = "repository_dispatch" ]; then
-            # Extract raw testKeys from payload
             # Supports:
-            #   ["SQP-1826","SQP-1797"]  OR  ["SQP-1826, SQP-1797"]
+            #   ["SQP-1826","SQP-1797"] OR ["SQP-1826, SQP-1797"]
             RAW_KEYS=$(jq -r '
               .client_payload.testKeys
               | if type=="array" then join(",") else tostring end
@@ -72,7 +69,7 @@ jobs:
             echo "✅ RAW_KEYS: $RAW_KEYS"
             echo "✅ GREP_PATTERN: $GREP_PATTERN"
           else
-            # Manual run fallback (you can type @login or SQP-1657 or any regex)
+            # Manual run fallback (regex / tag)
             echo "GREP_PATTERN=${{ github.event.inputs.TAG }}" >> $GITHUB_ENV
             echo "✅ Manual GREP_PATTERN: ${{ github.event.inputs.TAG }}"
           fi
@@ -82,7 +79,9 @@ jobs:
       # ----------------------------------------------------
       - name: Install dependencies
         run: npm install
-
+      - name: Install browserstack sdk
+        run: npm i -D browserstack-node-sdk@latest
+      
       # ----------------------------------------------------
       # 3.5 Install Playwright Browsers
       # ----------------------------------------------------
@@ -98,7 +97,8 @@ jobs:
           username: ${{ secrets.BROWSERSTACK_USERNAME }}
           access-key: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
           build-name: "SBM Playwright - ${{ github.run_number }}"
-          project-name: "SBM IB Automation"
+          project-name: "SBM"        
+      
 
       # ----------------------------------------------------
       # 5. Start BrowserStack Local Tunnel
@@ -108,21 +108,25 @@ jobs:
         with:
           local-testing: start
           local-identifier: ${{ github.run_id }}
-
+      - name: Debug BrowserStack config
+        run: |
+          echo "browserstack.yml:"
+          cat browserstack.yml || true
+          echo "browserstack.json:"
+          cat browserstack.json || true
       # ----------------------------------------------------
       # 6. Run Playwright Tests (by Jira keys regex or manual input)
       # ----------------------------------------------------
       - name: Run Playwright tests (BrowserStack)
         continue-on-error: true
+        shell: bash
         run: |
           echo "Running tests by grep: $GREP_PATTERN"
-
           if [ -z "$GREP_PATTERN" ]; then
             echo "❌ No test keys / grep pattern found. Failing run."
             exit 1
           fi
-
-          npx playwright test --grep "$GREP_PATTERN"
+          npx browserstack-node-sdk playwright test --grep "$GREP_PATTERN"
 
       # ----------------------------------------------------
       # 7. Stop BrowserStack Local Tunnel
@@ -141,33 +145,50 @@ jobs:
         run: npm run report:zip
 
       # ----------------------------------------------------
-      # 9. Convert Allure → XRAY JSON
+      # 9. Convert Allure → XRAY JSON (and copy output to repo root)
       # ----------------------------------------------------
       - name: Convert Allure to XRAY JSON
         if: always()
-        run: npx ts-node Utils/ExportToJsonv2.ts
+        shell: bash
+        run: |
+          npx ts-node Utils/ExportToJsonv2.ts
+
+          echo "📁 Listing allure-report/data:"
+          ls -la allure-report/data || true
+
+          # Your script writes to: allure-report/data/xray-import.json
+          # Copy to repo root so later steps can find it easily
+          if [ -f "allure-report/data/xray-import.json" ]; then
+            cp allure-report/data/xray-import.json ./xray-import.json
+            echo "✅ Copied xray-import.json to repo root"
+          else
+            echo "❌ xray-import.json not found in allure-report/data"
+            exit 1
+          fi
 
       # ----------------------------------------------------
-      # 10. Upload Artifacts
+      # 10. Upload Artifacts (non-blocking + short retention)
       # ----------------------------------------------------
       - name: Upload Test Artifacts
         if: always()
+        continue-on-error: true
         uses: actions/upload-artifact@v4
         with:
           name: playwright-artifacts
+          retention-days: 3
           path: |
-            allure-results/
             allure-report.zip
-            exported.json
+            xray-import.json
 
       # ----------------------------------------------------
-      # 11. Upload Results to XRAY
+      # 11. Upload Results to XRAY (create execution + capture key)
       # ----------------------------------------------------
-      - name: Upload Results to XRAY
+      - name: Upload Results to XRAY (create execution)
         if: always()
+        shell: bash
         run: |
-          if [ ! -f exported.json ]; then
-            echo "❌ exported.json not found — skipping XRAY upload"
+          if [ ! -f xray-import.json ]; then
+            echo "❌ xray-import.json not found — skipping XRAY upload"
             exit 0
           fi
 
@@ -176,9 +197,49 @@ jobs:
             -d "{\"client_id\":\"${{ secrets.XRAY_CLIENT_ID }}\",\"client_secret\":\"${{ secrets.XRAY_CLIENT_SECRET }}\"}" \
             | tr -d '"')
 
-          curl -X POST "https://xray.cloud.getxray.app/api/v2/import/execution" \
+          echo "✅ XRAY Token received"
+
+          RESPONSE=$(curl -s -X POST "https://xray.cloud.getxray.app/api/v2/import/execution" \
             -H "Authorization: Bearer $TOKEN" \
             -H "Content-Type: application/json" \
-            --data-binary @exported.json
+            --data-binary @xray-import.json)
 
-   
+          echo "✅ XRAY Import response:"
+          echo "$RESPONSE"
+
+          EXECUTION_KEY=$(echo "$RESPONSE" | jq -r '.key // empty')
+
+          if [ -z "$EXECUTION_KEY" ]; then
+            echo "❌ Could not extract execution key from XRAY response"
+            exit 1
+          fi
+
+          echo "✅ Test Execution Key: $EXECUTION_KEY"
+          echo "EXECUTION_KEY=$EXECUTION_KEY" >> $GITHUB_ENV
+
+      # ----------------------------------------------------
+      # 12. Attach Allure ZIP to Test Execution in Jira
+      # ----------------------------------------------------
+      - name: Attach Allure ZIP to Test Execution in Jira
+        if: always()
+        shell: bash
+        run: |
+          if [ -z "$EXECUTION_KEY" ]; then
+            echo "❌ EXECUTION_KEY not found — skipping attachment"
+            exit 0
+          fi
+
+          FILE_PATH="allure-report.zip"
+
+          if [ ! -f "$FILE_PATH" ]; then
+            echo "❌ File $FILE_PATH not found — skipping attachment"
+            exit 0
+          fi
+
+          echo "✅ Uploading attachment $FILE_PATH to Jira issue $EXECUTION_KEY"
+
+          curl -X POST \
+            -H "X-Atlassian-Token: no-check" \
+            -u "${{ secrets.JIRA_EMAIL }}:${{ secrets.JIRA_API_TOKEN }}" \
+            -F "file=@allure-report.zip" \
+            "https://${{ secrets.JIRA_DOMAIN }}/rest/api/3/issue/${EXECUTION_KEY}/attachments"
