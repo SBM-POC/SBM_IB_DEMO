@@ -1,0 +1,5 @@
+﻿FlowType,Scenario,Username,Password,ExpectedOutcome,ExpectedResult,ErrorMessage
+Happy,Valid Username and Password,adam,welcome@32,Successful Login,Navigate to Dashboard,
+Unhappy,Invalid Password,1197301,solution@27,Unsuccessful Login,Error Message displayed,"Invalid customer details entered. Please try again If you think this is an error, please contact us."
+Unhappy,Invalid Username,"/",Test$1234,Unsuccessful Login,Error Message displayed,"Invalid customer details entered. Please try again If you think this is an error, please contact us."
+Unhappy,Account - Locked,1506574,welcome@101,Unsuccessful Login,Error Message displayed,"You are starting a lockout session and cannot login for 1 minutes. If you think this is an error, please contact us."

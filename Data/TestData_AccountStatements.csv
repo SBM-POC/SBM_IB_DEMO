@@ -1,0 +1,3 @@
+FlowType;Description;Username;Password;AccountType;Account;FromDate;ToDate
+Happy;Account Statement for Current account;adam;Test@2345;CURRENT AND SAVING;00120100007144;01/01/2025;31/12/2025
+Happy;Account Statement for Savings account;adam;Test@2345;CURRENT AND SAVING;00136200092420;01/01/2025;31/12/2025

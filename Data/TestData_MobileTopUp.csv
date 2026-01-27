@@ -1,0 +1,7 @@
+scenarioName,flow,Username,Password,Billers,SaveAs,FromAccount,MobileNumber,Amount,FromAccountErrorMessage,MobileNumberErrorMessage
+Emtel transaction of 50 ,positive,adam,Test@2345,Emtel,Test0,00120100007144,57316104,50,,
+MTML transaction of 25,positive,1169650,Test$1234,MTML,Test2,4546951000510062,59620012,25,,
+MTML transaction of 50,positive,1169650,Test$1234,MTML,Test3,4546951000510062,59620012,50,,
+MTML transaction of 100,positive,1197301,Test$1234,MTML,Test4,002510100007660,59620012,100,,
+Emtel transaction of 50 from FCY account ,positive,adam,Test@2345,Emtel,Test5 ,50100000617170,57316104,50,,
+Required fields blank,negative,adam,Test@2345,MY.T,Test6,,,50,Please select an account, Enter recipient mobile number or identifier

@@ -1,0 +1,12 @@
+Description;Username;Password;AccountType;Account;DisplayOnScreen;AllowDebit
+Verify Dormant Account;1169650;Test$1234;Savings Account;00110100212761;Yes;No
+Verify Active Account;1169650;Test$1234;Overdraft Account;00130100000265;Yes;Yes
+Verify Frozen Account;1633500;Test$1234;Savings Account;00110100356660;Yes;No
+Verify Joint Account;adam;Test@2345;Current Account;00120100007144;Yes;Yes
+Verify Single Account;adam;Test@2345;Overdraft Account;00136200092420;Yes;Yes
+Verify Legal Guardian Account;1118260;Test@1234;Savings Account;00810100275952;Yes;Yes
+Verify Guarantor Account;700017236;solution@26;Savings Account;50100000012876;Yes;Yes
+Verify Term deposit Account;1169650;Test$1234;Term Deposits;506000000190111;Yes;No
+Verify Credit Card;1169650;Test$1234;Credit Card;4546951000510060;Yes;No
+Verify Prepaid Card;1598830;Test@1234;Prepaid Card;4660890002028650;Yes;No
+Verify Loan;1756278;Test@1234;Retail Loan Account;50400001245434;Yes;No

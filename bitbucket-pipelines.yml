@@ -1,0 +1,163 @@
+#  Template NodeJS build
+
+#  This template allows you to validate your NodeJS code.
+#  The workflow allows running tests and code linting on the default branch.
+image: mcr.microsoft.com/playwright:v1.53.1-jammy
+
+pipelines:
+  default:
+    - step:
+        name: Run Playwright Tests
+        caches:
+          - node
+        script:
+          # Set CI environment variable to true for Playwright to run in CI mode
+          - export CI=true
+
+          # Install dependencies based on package-lock.json
+          - npm ci
+
+          # Install Playwright and its required dependencies
+          - npx playwright install --with-deps
+
+          # Clean up old Allure results and report folders (if they exist)
+          - rm -rf allure-results allure-report
+
+          # Run Playwright tests using Chromium project
+          # Capture test result status in TESTS_FAILED variable
+          - |
+              if npx playwright test --project=chromium; then
+                echo "Tests passed."
+                export TESTS_FAILED=false
+              else
+                echo "Tests failed."
+                export TESTS_FAILED=true
+              fi
+
+          # Write test result flag to a file for the next step to read
+          - echo "TESTS_FAILED=$TESTS_FAILED" > notification-env.txt
+
+        artifacts:
+
+          # Export test results for next steps
+          - allure-results/**
+
+          # Export pass/fail flag to next step
+          - notification-env.txt
+
+    - step:
+        name: Generate Allure Report
+        script:
+
+          # Install Java Runtime Environment (required for Allure)
+          - apt-get update && apt-get install -y default-jre wget tar
+
+          # Set JAVA_HOME environment variable
+          - export JAVA_HOME=/usr/lib/jvm/default-java
+
+          # Add Java binaries to system PATH
+          - export PATH=$JAVA_HOME/bin:$PATH
+
+          # Download Allure CLI (version 2.27.0)
+          - wget -q https://github.com/allure-framework/allure2/releases/download/2.27.0/allure-2.27.0.tgz
+
+          # Extract the downloaded archive
+          - tar -xzf allure-2.27.0.tgz
+
+          # Move Allure CLI to a permanent directory
+          - mv allure-2.27.0 /opt/allure
+
+          # Create a symbolic link to make Allure globally available
+          - ln -s /opt/allure/bin/allure /usr/bin/allure
+
+          # Generate the Allure HTML report from results
+          - allure generate allure-results --clean -o allure-report
+
+        artifacts:
+          - allure-report/**
+        # - step:
+        # name: Export to Xray
+        # script:
+          # - npm ci
+          # - npx ts-node Utils/ExportToJson.ts
+        # artifacts:
+          # - exported.json
+          # - notification-env.txt
+
+    # - step:
+        # name: Test Xray Upload via cURL
+        # script:
+          # - apt-get update && apt-get install -y curl jq
+          # - |
+              # export TOKEN=$(curl -s -X POST "https://xray.cloud.getxray.app/api/v2/authenticate" \
+                # -H "Content-Type: application/json" \
+                # -d "{\"client_id\":\"$XRAY_CLIENT_ID\",\"client_secret\":\"$XRAY_CLIENT_SECRET\"}" \
+                # | tr -d '"')
+
+              # echo "Token: ${TOKEN:0:20}..."
+
+              # if [ -z "$TOKEN" ]; then
+                # echo "Failed to obtain Xray token."
+                # exit 1
+              # fi
+
+              # RESPONSE=$(curl -s -X POST "https://xray.cloud.getxray.app/api/v2/import/execution" \
+                # -H "Content-Type: application/json" \
+                # -H "Authorization: Bearer $TOKEN" \
+                # --data-binary @exported.json)
+
+              # echo "Raw response from Xray:"
+              # echo "$RESPONSE"
+
+              # EXECUTION_ID=$(echo "$RESPONSE" | jq -r '.id')
+              # EXECUTION_KEY=$(echo "$RESPONSE" | jq -r '.key')
+
+              # if [ -z "$EXECUTION_KEY" ] || [ "$EXECUTION_KEY" == "null" ]; then
+                # echo "Failed to extract execution key from Xray response."
+                # echo "EXECUTION_URL=Upload failed" >> notification-env.txt
+                # exit 1
+              # fi
+
+              # EXECUTION_URL="https://rubricmu.atlassian.net/browse/$EXECUTION_KEY"
+              # echo "Execution URL: $EXECUTION_URL"
+
+              # # Append to notification-env.txt
+              # echo "EXECUTION_URL=$EXECUTION_URL" >> notification-env.txt
+
+        # artifacts:
+          # - notification-env.txt
+
+    # - step:
+        # name: Notify MS Teams
+        # script:
+          # - |
+              # if [ -f notification-env.txt ]; then
+                # source notification-env.txt
+              # fi
+
+              # if [ "$TESTS_FAILED" = "true" ]; then
+                # MS_TEAMS_MESSAGE="❌ *Some Playwright tests failed!*\n\n- Allure report is saved as a Bitbucket artifact.\n- [Test Execution in Xray]($EXECUTION_URL)"
+              # else
+                # MS_TEAMS_MESSAGE="✅ *All Playwright tests passed!*\n\n- Allure report is saved as a Bitbucket artifact.\n- [Test Execution in Xray]($EXECUTION_URL)"
+              # fi
+
+              # echo -e "$MS_TEAMS_MESSAGE" > message.txt
+              # export MS_TEAMS_MESSAGE=$(cat message.txt)
+
+              # pipe_path=".bitbucket-pipe.yml"
+              # echo "WEBHOOK_URL: $TEAMS_WEBHOOK_URL" > $pipe_path
+              # echo "MESSAGE: \"$MS_TEAMS_MESSAGE\"" >> $pipe_path
+          # - pipe: atlassian/ms-teams-notify:0.3.0
+            # variables:
+              # WEBHOOK_URL: $TEAMS_WEBHOOK_URL
+              # MESSAGE: >
+                # $(cat message.txt)
+
+     
+
+
+
+
+    
+
+

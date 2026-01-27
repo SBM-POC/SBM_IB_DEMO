@@ -1,0 +1,22 @@
+ScenarioName,Username,Password,BillerGroup,BillerName,EasyPayCategory,EasyPayBiller,FromAccountNo,SaveAs,ReferenceNumber,ContractAccountNumber,Amount,Remarks,Action
+Make CEB payment,1118260,Test@1234,Other Utilities,CEB,,,00810100275952,PAYMENT CEB189,,CEB-1234,100,Automation test CEB,Pay
+Save CEB payment,1598830,Test@1234,Other Utilities,CEB,,,01010100235246,PAYMENT CEB19,,CEB-456,10,Automation test CEB,Save
+Make a CEB payment Save & Pay ,1169650,Test$1234,Other Utilities,CEB,,,00130100000265,PAYMENT CEB20,,CEB-456,10,Automation CEB,Save&Pay
+Pharmacie via EasyPay,1118260,Test@1234,EasyPay,,Pharmacies,Unicorn,00810100275952,,Uni-123,,60,EasyPay Pharmacy payment,Pay
+Pro Tuning via EasyPay,1169650,Test$1234,EasyPay,,Automotive Parts/Access Stores,Pro Tuning,01010100235246,,Car-123,,10,EasyPay test payment,Pay
+Belleza via EasyPay,1598830,Test@1234,EasyPay,,Beauty Shop/Barber Shop,Belleza,01010100235246,Belleza,test1,,10,EasyPay test payment,Pay
+Canal+ via EasyPay,1598830,Test@1234,EasyPay,,Cable Services,Canal+,50100000283955,,,test,10,EasyPay test payment,Pay
+Saveurs Plus - Ste Croix via EasyPay,1118260,Test@1234,EasyPay,,Restaurants,Saveurs Plus - Ste Croix,00810100275952,,,test,10,EasyPay test payment,Pay
+Negative CEB Missing remarks,1598830,Test@1234,Other Utilities,CEB,,,01010100235246,PAYMENT CEB33,,CEB-1234,10,,Pay
+Negative CEB Missing Amounts,1598830,Test@1234,Other Utilities,CEB,,,01010100235246,PAYMENT CE3,,CEB-1234,,Missing amounts,Pay
+Negative CEB Missing SaveAs ,1598830,Test@1234,Other Utilities,CEB,,,01010100235246,,CEB-1234,10,,Missing Save As,Save
+Negative Remarks >35,1598830,Test@1234,EasyPay,,Cable Services,Canal+,50100000283955,,,test,10,This remark is definitely longer than thirty-five characters.,Pay
+CEB payment TemplateQuickPay ,1197301,Test@1234,Other Utilities,CEB,,,02510100007660,CEB home bill,,,,Automation CEB,TemplateQuickPay
+CEB payment TemplateEdit ,1197301,Test@1234,Other Utilities,CEB,,,00120100026407,CEB office bill,,,,Automation CEB,TemplateEdit
+CEB payment TemplateDelete ,1197301,Test@1234,Other Utilities,CEB,,,00120100026407,CEB home bill,,,,Automation CEB,TemplateDelete
+CEB payment Payment Delete ,1169650,Test$1234,Other Utilities,CEB,,,00130100000265,PAYMENT CEB20,,CEB-456,10,Automation CEB,TemplateDelete
+Pay Own credit card ,1197301,Test@1234,Pay SBM Credit Card,,,, 02510100007660,Pay Own credit card81,4543474002449588,,10,Automation CEB,Pay
+Pay own SBM credit card,1197301,Test@1234,Pay SBM Credit Card,,,,00120100026407,Pay Own credit card89,4543474002449588,,10,Automation CEB,Save&Pay
+Pay own credit card via template,1169650,Test$1234,,,,,,Card repayment,,,,,TemplateQuickPay
+CEB limit exceed,1197301,Test@1234,Other Utilities,CEB,,,02510100007660,PAYMENT CEB LIMIT1,01010100235246,,1500,Automation CEB,Pay
+Pay Own credit card limit ,1197301,Test@1234,Pay SBM Credit Card,,,, 02510100007660,Pay Own credit card Limit131,4543474002449588,,6000,Automation CEB,Pay

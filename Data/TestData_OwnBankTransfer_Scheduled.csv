@@ -1,0 +1,4 @@
+﻿ScenarioName,Flow,Username,Password,FromAccount,ToAccount,Currency,Amount,Remarks,TransactionDate,eBankingRefID,PaymentDate,Frequency,UntilFurtherNotice ,ErrorMessageAccount,ErrorMessageAmount,ErrorMessageRemarks,ErrorMessag
+Transfer from a MUR account to a MUR account,positive,adam,Test@2345,1.20E+11,1.36E+11,MUR,100,Test,TODAY+1,,,,,,,,
+Transfer from a FCY account to a FCY account,positive,adam,Test@2345,1.26E+11,5.01E+13,AUD,10,Test,TODAY+2,,,,,,,,
+Transfer from a FCY account to a MUR account,positive,adam,Test@2345,1.26E+11,1.20E+11,MUR,10,Test,TODAY+1,,,,,,,,
