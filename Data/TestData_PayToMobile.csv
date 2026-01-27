@@ -1,0 +1,23 @@
+ScenarioName,flow,username,password,RecipientMobile,FromAccount,Currency,Amount,Remarks,Error_Frequency ,Error_Message 
+MUR to MUR transaction with registered mobile number ,positive,1169650,solution@32,58296735,00130100000265- Overdraft,MUR,100,Testing ,,
+Mobile number not registered,negative ,1169650,solution@32,57771113,,,,Testing ,inline,"This mobile number is not eligible for Pay to Mobile services
+Please try again or use another mode of payment.
+
+
+
+"
+Amount more than available balance ,negative ,1169650,solution@32,58296735,00130100000265- Overdraft,MUR,5000000,Testing ,inline,Amount cannot be greater than available balance
+User does not insert 5 before the mobile number,negative ,1169650,solution@32,8296735,,,,Testing ,inline, Please enter a valid mobile number
+User does not insert a mobile number of 8-digit length,negative ,1169650,solution@32,82967354156,,,,Testing ,inline," Please enter a valid mobile number
+
+
+
+"
+Insert alphabet and/or special character in amount field,negative ,1169650,solution@32,58296735,,,abcd,Testing ,,
+Leaving mandatory fields blank and verifying error messages ,negative ,1169650,solution@32,58296735,00130100000265- Overdraft,MUR,100,,inline,"Amount is required |  Remarks is required
+
+
+
+ "
+,,,,,,,,,,
+,,,,,,,,,,

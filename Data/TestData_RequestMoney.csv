@@ -1,0 +1,7 @@
+scenarioName,flow,username,password ,RecipientMobile,RequestToAccount,TransferAmount,Remarks,ErrorMessage
+Request money from a MUR to MUR account ,positive,adam,welcome@32,58296735,00120100007144,100,Testing1,
+Request money from a MUR to FCY ,positive,adam,welcome@32,58296735,00126200000413,10,Testing2,
+Transfer- Amount exceeds daily remaining limit,negative,adam,welcome@32,58296735,00121100007144,10100,Testing3,
+Foreign  number without country code ,negative,adam,welcome@32,47523564656233,,,, Please enter a valid mobile number with country code.
+User does not enter a mobile number of 8 length digit ,negative,adam,welcome@32,47523564656233,,,, Please enter a valid mobile number with country code.
+User does not enter 5 before the mobile number ,negative,adam,welcome@32,8296735,,,, Please enter a valid mobile number with country code.

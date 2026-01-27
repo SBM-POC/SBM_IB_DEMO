@@ -1,0 +1,12 @@
+Description;Username;Password;AccountType;Account;DisplayOnScreen;AllowDebit
+Verify Dormant Account;1169650;solution@32;CURRENT AND SAVING;00110100212761;Yes;No
+Verify Active Account;1169650;solution@32;CURRENT AND SAVING;00130100000265;Yes;Yes
+Verify Frozen Account;1633500;welcome@32;CURRENT AND SAVING;00110100356660;Yes;No
+Verify Joint Account;1076454;welcome@32;CURRENT AND SAVING;00120100007144;Yes;Yes
+Verify Single Account;1076454;welcome@32;CURRENT AND SAVING;00136200092420;Yes;Yes
+Verify Legal Guardian Account;1118260;Test$1234;CURRENT AND SAVING;00810100275952;Yes;Yes
+Verify Guarantor Account;700017236;solution@26;CURRENT AND SAVING;50100000012876;Yes;Yes
+Verify Term deposit Account;1169650;solution@32;TERM DEPOSIT;506000000190111;Yes;No
+Verify Credit Card;1169650;solution@32;CREDIT CARD;4546951000510060;Yes;No
+Verify Prepaid Card;1598830;welcome@10;PREPAID CARD;4660890002028650;Yes;No
+Verify Loan;1756278;welcome@32;LOAN;50400001245434;Yes;No

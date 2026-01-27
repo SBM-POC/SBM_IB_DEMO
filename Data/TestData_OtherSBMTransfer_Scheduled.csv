@@ -1,0 +1,4 @@
+FlowType;Description;Sender_Account;Recipient_Account;Pay_n_Transfer_SubMenu;Amount;TransferDate;Remarks;OTP;Transfer_Currency;Sender_Account_Nickname;Username;Password;ExchangeRateType;eBankingRefID;PaymentDate;AssociatedXRayID;SBMTestCaseID
+Happy;Transfer for MUR to MUR accounts;00810100275952;02510100007660;Other SBM Account Transfer;100.00;TODAY+1;Transfer from MUR to MUR;;MUR;00810100275952 Mur;1118260;Test$1234;;101508000000196704;28/11/2025;;
+Happy;Transfer for FCY to MUR accounts;00126200000413;00810100275952;Other SBM Account Transfer;1.00;TODAY;Transfer from FCY to MUR;;EUR;$$$$$$$$;adam;welcome@32;;;;;
+Happy;Transfer for FCY to FCY accounts;00126200000413;50100000478849;Other SBM Account Transfer;1.00;TODAY;Transfer from FCY to FCY;;EUR;$$$$$$$$;adam;welcome@32;;;;;

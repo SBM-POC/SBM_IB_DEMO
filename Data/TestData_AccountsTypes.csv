@@ -1,0 +1,7 @@
+﻿Description;Username;Password;AccountType;Account;AccountNickname
+Verify Current Account Screen;adam;welcome@32;CURRENT AND SAVING;00120100007144;00120100007144
+Verify Savings Account Screen;adam;welcome@32;CURRENT AND SAVING;00136200092420;OD Account
+Verify Term Deposit Screen;1169650;solution@32;TERM DEPOSIT;50600000190111;50600000190111
+Verify Credit Card Screen;1169650;solution@32;CREDIT CARD;454695********0062;454695********0062
+Verify Prepaid Card Screen;1031410;PASSWORD;PREPAID CARD;466084********9029;466084********9029
+Verify Loan Screen;1756278;welcome@32;LOAN;50400001245434;50400001245434

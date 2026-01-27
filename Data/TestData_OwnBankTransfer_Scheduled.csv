@@ -1,0 +1,4 @@
+ScenarioName,Flow,Username,Password,FromAccount,ToAccount,Currency,Amount,Remarks,TransactionDate,eBankingRefID,PaymentDate
+Transfer from a MUR account to a MUR account,positive,adam,welcome@32,00120100007144,00136200092420,MUR,100.00,Test,TODAY+1,,
+Transfer from a FCY account to a FCY account,positive,adam,welcome@32,00126200000413,50100000617170,AUD,10.00,Test,TODAY+2,,
+Transfer from a FCY account to a MUR account,positive,adam,welcome@32,00126200000413,00120100007144,MUR,10.00,Test,TODAY+1,,

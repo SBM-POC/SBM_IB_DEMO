@@ -1,0 +1,184 @@
+name: Playwright Tests (BrowserStack)
+
+on:
+  repository_dispatch:
+    types: [trigger-xray-tests]
+
+  workflow_dispatch:
+    inputs:
+      TAG:
+        description: "Manual fallback: grep pattern or tag (ex: @login or SQP-1657)"
+        required: true
+        default: ""
+
+env:
+  BROWSERSTACK_LOCAL_IDENTIFIER: ${{ github.run_id }}
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      # ----------------------------------------------------
+      # 1. Checkout Code
+      # ----------------------------------------------------
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # ----------------------------------------------------
+      # 2. Setup Node.js
+      # ----------------------------------------------------
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      # ----------------------------------------------------
+      # 2.5 Read keys from Jira payload (build Playwright grep)
+      # ----------------------------------------------------
+      - name: Read keys from Jira payload (build Playwright grep)
+        shell: bash
+        run: |
+          echo "Event name: $GITHUB_EVENT_NAME"
+
+          # Print full event payload for debugging
+          echo "----- GitHub Event Payload -----"
+          cat "$GITHUB_EVENT_PATH"
+          echo "--------------------------------"
+
+          if [ "$GITHUB_EVENT_NAME" = "repository_dispatch" ]; then
+            # Extract raw testKeys from payload
+            # Supports:
+            #   ["SQP-1826","SQP-1797"]  OR  ["SQP-1826, SQP-1797"]
+            RAW_KEYS=$(jq -r '
+              .client_payload.testKeys
+              | if type=="array" then join(",") else tostring end
+            ' "$GITHUB_EVENT_PATH")
+
+            # Build regex: SQP-1826|SQP-1797|...
+            GREP_PATTERN=$(echo "$RAW_KEYS" \
+              | tr ',' '\n' \
+              | sed 's/^[[:space:]]*//;s/[[:space:]]*$//' \
+              | grep -E '^[A-Za-z]+-[0-9]+$' \
+              | paste -sd'|' -)
+
+            TEST_PLAN_KEY=$(jq -r '.client_payload.testPlanKey // ""' "$GITHUB_EVENT_PATH")
+
+            echo "TEST_PLAN_KEY=$TEST_PLAN_KEY" >> $GITHUB_ENV
+            echo "XRAY_TEST_KEYS=$RAW_KEYS" >> $GITHUB_ENV
+            echo "GREP_PATTERN=$GREP_PATTERN" >> $GITHUB_ENV
+
+            echo "✅ TEST_PLAN_KEY: $TEST_PLAN_KEY"
+            echo "✅ RAW_KEYS: $RAW_KEYS"
+            echo "✅ GREP_PATTERN: $GREP_PATTERN"
+          else
+            # Manual run fallback (you can type @login or SQP-1657 or any regex)
+            echo "GREP_PATTERN=${{ github.event.inputs.TAG }}" >> $GITHUB_ENV
+            echo "✅ Manual GREP_PATTERN: ${{ github.event.inputs.TAG }}"
+          fi
+
+      # ----------------------------------------------------
+      # 3. Install Dependencies
+      # ----------------------------------------------------
+      - name: Install dependencies
+        run: npm install
+
+      # ----------------------------------------------------
+      # 3.5 Install Playwright Browsers
+      # ----------------------------------------------------
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps
+
+      # ----------------------------------------------------
+      # 4. Setup BrowserStack Build + Project
+      # ----------------------------------------------------
+      - name: BrowserStack Env Setup
+        uses: browserstack/github-actions/setup-env@master
+        with:
+          username: ${{ secrets.BROWSERSTACK_USERNAME }}
+          access-key: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
+          build-name: "SBM Playwright - ${{ github.run_number }}"
+          project-name: "SBM IB Automation"
+
+      # ----------------------------------------------------
+      # 5. Start BrowserStack Local Tunnel
+      # ----------------------------------------------------
+      - name: Start BrowserStack Local
+        uses: browserstack/github-actions/setup-local@master
+        with:
+          local-testing: start
+          local-identifier: ${{ github.run_id }}
+
+      # ----------------------------------------------------
+      # 6. Run Playwright Tests (by Jira keys regex or manual input)
+      # ----------------------------------------------------
+      - name: Run Playwright tests (BrowserStack)
+        continue-on-error: true
+        run: |
+          echo "Running tests by grep: $GREP_PATTERN"
+
+          if [ -z "$GREP_PATTERN" ]; then
+            echo "❌ No test keys / grep pattern found. Failing run."
+            exit 1
+          fi
+
+          npx playwright test --grep "$GREP_PATTERN"
+
+      # ----------------------------------------------------
+      # 7. Stop BrowserStack Local Tunnel
+      # ----------------------------------------------------
+      - name: Stop BrowserStack Local
+        if: always()
+        uses: browserstack/github-actions/setup-local@master
+        with:
+          local-testing: stop
+
+      # ----------------------------------------------------
+      # 8. Generate Allure ZIP Report
+      # ----------------------------------------------------
+      - name: Generate Allure ZIP Report
+        if: always()
+        run: npm run report:zip
+
+      # ----------------------------------------------------
+      # 9. Convert Allure → XRAY JSON
+      # ----------------------------------------------------
+      - name: Convert Allure to XRAY JSON
+        if: always()
+        run: npx ts-node Utils/ExportToJsonv2.ts
+
+      # ----------------------------------------------------
+      # 10. Upload Artifacts
+      # ----------------------------------------------------
+      - name: Upload Test Artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-artifacts
+          path: |
+            allure-results/
+            allure-report.zip
+            exported.json
+
+      # ----------------------------------------------------
+      # 11. Upload Results to XRAY
+      # ----------------------------------------------------
+      - name: Upload Results to XRAY
+        if: always()
+        run: |
+          if [ ! -f exported.json ]; then
+            echo "❌ exported.json not found — skipping XRAY upload"
+            exit 0
+          fi
+
+          TOKEN=$(curl -s -X POST "https://xray.cloud.getxray.app/api/v2/authenticate" \
+            -H "Content-Type: application/json" \
+            -d "{\"client_id\":\"${{ secrets.XRAY_CLIENT_ID }}\",\"client_secret\":\"${{ secrets.XRAY_CLIENT_SECRET }}\"}" \
+            | tr -d '"')
+
+          curl -X POST "https://xray.cloud.getxray.app/api/v2/import/execution" \
+            -H "Authorization: Bearer $TOKEN" \
+            -H "Content-Type: application/json" \
+            --data-binary @exported.json
+
+   

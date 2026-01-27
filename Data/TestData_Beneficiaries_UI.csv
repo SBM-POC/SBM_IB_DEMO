@@ -1,0 +1,12 @@
+Description,Username,Password,BankIdentifier,TransferType,ShouldDisplay,ShouldAllowSave,NegativeCase
+Positive Other SBM Account,1197301,solution@32,Other SBM Account Transfer,Normal,yes,no,no
+Positive Normal Local Bank Transfer,1197301,solution@32,Other Local Bank Transfer,Normal,yes,no,no
+Positive MACSS (Account),1197301,solution@32,Other Local Bank Transfer,MACSS,yes,no,no
+Positive MACSS (IBAN),1197301,solution@32,Other Local Bank Transfer,MACSS,yes,no,no
+Positive Instant Local Bank,1197301,solution@32,Other Local Bank Transfer,Instant,yes,no,no
+Positive SWIFT Transfer Basic,1197301,solution@32,SWIFT Transfer,Normal,yes,no,no
+Negative Blank Form (Other SBM),1197301,solution@32,Other SBM Account Transfer,Normal,yes,no,yes
+Negative Blank Form (Normal Local),1197301,solution@32,Other Local Bank Transfer,Normal,yes,no,yes
+Negative Blank Form (MACSS),1197301,solution@32,Other Local Bank Transfer,MACSS,yes,no,yes
+Negative Blank Form (Instant),1197301,solution@32,Other Local Bank Transfer,Instant,yes,no,yes
+Negative Blank Form (SWIFT),1197301,solution@32,SWIFT Transfer,Normal,yes,no,yes

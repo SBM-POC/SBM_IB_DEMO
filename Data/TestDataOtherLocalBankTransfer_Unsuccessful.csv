@@ -1,0 +1,3 @@
+﻿Description,Scenario_Type,Username,Password,Sender_Account,Transfer_Type,Recipient_Account,Amount,Beneficiary_Name,Transaction_Date,Remarks ,Beneficiary_Bank,ErrMsg_AC_No,ErrMsg_Amount,ErrMsg_BeneficiaryName,ErrMsg_Remarks,ErrMsg_BeneficiaryBank
+Verify required fields,Negative,adam,welcome@32,,,,,,,,,Recipient A/C No. is required,Amount is required,Payment name is required,Remarks is required,Beneficiary Bank is required
+Empty Amount,Negative,adam,welcome@32,,,123456793,,MCB customer,18/09/2025,Test IPS transfer,Mauritius Commercial Bank Ltd,,,,,
