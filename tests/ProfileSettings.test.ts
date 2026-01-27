@@ -16,7 +16,9 @@ test.describe('Profile Settings - Set Default Currency', { tag: ['@E2E', '@Profi
     const scenarioLabel = row.ScenarioName?.trim();
     test(`Scenario ${index + 1}: ${scenarioLabel}`, async ({ page }, testInfo) => {
 
-      const currencyTitle = row.UI_English.trim();
+      const currencyTitleEng = row.UI_English.trim();
+      const currencyTitleFrench = row.UI_English.trim();
+
       const currencySymbol = row.Currency.trim();
 
       const loginPage = new LoginPage(page);
@@ -40,7 +42,7 @@ test.describe('Profile Settings - Set Default Currency', { tag: ['@E2E', '@Profi
         });
 
         await allure.step('Select Currency and Save', async () => {
-          await profileSettingsPage.SelectCurrencyAndSave(currencyTitle);
+          await profileSettingsPage.SelectCurrencyAndSave(currencyTitleEng,currencyTitleFrench);
           await waitForSpinnerToDisappear(page);
         });
         await allure.step('Verify if request was succesful', async () => {
