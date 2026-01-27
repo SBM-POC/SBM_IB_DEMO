@@ -58,7 +58,7 @@ interface XrayReport {
 // --- Configuration ---
 const INPUT_FILE = "suites.json";
 const OUTPUT_FILE = 'xray-import.json';
-const PROJECT_KEY = 'SQP'; // Default Project Key
+const PROJECT_KEY = 'SIA'; // Default Project Key
 const TEST_PLAN_KEY = process.env.TEST_PLAN_KEY; // Target Test Plan
 
 /**
