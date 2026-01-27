@@ -21,7 +21,6 @@ export class ReceiptHelper {
   const [download] = await Promise.all([
     this.page.waitForEvent("download"),
     this.downloadButton.click(),
-    waitForSpinnerToDisappear(this.page),
   ]);
 
 
