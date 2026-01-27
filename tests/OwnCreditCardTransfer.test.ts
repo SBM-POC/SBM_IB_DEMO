@@ -71,6 +71,7 @@ test.describe('SIA-8|Pay Own Credit Card',  { tag: ['@E2E','@OwnCreditCardTransf
           await creditCardPaymentPage.fillCreditCardTransferForm(data.fromAccount, data.toAccount, data.amount, data.remarks);
           await creditCardPaymentPage.nextButton.waitFor({ state: 'visible'});
           await creditCardPaymentPage.nextButton.click();
+          await waitForSpinnerToDisappear(page);
 
         });
         if (flowType === 'happy') {
@@ -82,17 +83,19 @@ test.describe('SIA-8|Pay Own Credit Card',  { tag: ['@E2E','@OwnCreditCardTransf
           await allure.step('Validate confirmation details', async () => {
             await creditCardPaymentPage.verifyPleaseConfirmDialogDetails(data.fromAccount, data.fromAccountNickname, data.toAccount, data.creditCardName, data.amount, data.creditCardCurrency, "EXCHANGERATE", actualPaymentDate, data.remarks)
             await creditCardPaymentPage.clickShowAmountNext();
+            await waitForSpinnerToDisappear(page);
           });
 
           await allure.step('Verify Successful Dialog Details', async () => {
-            actualRefID = await creditCardPaymentPage.verifySuccessfulDialogDetails(data.fromAccount, data.fromAccountCurrency, data.toAccount, data.creditCardCurrency, data.amount, actualPaymentDate, data.remarks);
+            const actualPaymentDate2 = await utilityLibraryPage.CalculateDateMMDDYYYY(data.paymentDate);
+            actualRefID = await creditCardPaymentPage.verifySuccessfulDialogDetails(data.fromAccount, data.fromAccountCurrency, data.toAccount, data.creditCardCurrency, data.amount, actualPaymentDate2, data.remarks);
           });
 
           await allure.step('Download receipt and verify receipt content', async () => {
             const maskedFromAccount = await utilityLibraryPage.MaskedAccountNumber(data.fromAccount);
             const maskedToAccount = await utilityLibraryPage.MaskedAccountNumber(data.toAccount);
-            const actualPaymentDate = await utilityLibraryPage.CalculateDateMonthDDYYYY(data.paymentDate);
-            await creditCardPaymentPage.verifyReceiptData(maskedFromAccount, maskedToAccount, actualPaymentDate, data.amount, data.creditCardCurrency, data.remarks, actualRefID);
+            const actualPaymentDate1 = await utilityLibraryPage.CalculateDateMonthDDYYYY(data.paymentDate);
+            await creditCardPaymentPage.verifyReceiptData(maskedFromAccount, maskedToAccount, actualPaymentDate1, data.amount, data.creditCardCurrency, data.remarks, actualRefID);
           });  
 
           await allure.step('Verify amount deduction from debit via search by ref ID', async () => {
@@ -107,9 +110,16 @@ test.describe('SIA-8|Pay Own Credit Card',  { tag: ['@E2E','@OwnCreditCardTransf
               await utilityLibraryPage.VerifyExpectedActual((availableBalDiff.toFixed(2)).toString(), data.amount);
             }
           });
-          await allure.step('Verify details in calendar activity history for debit account', async () => {
-            await waitForSpinnerToDisappear(page);
 
+          await allure.step('Verify details in transaction history screen by ref ID', async () => {
+            await transactionHistoryPage.OpenTransactionHistoryScreen(page, data.fromAccount);
+            await transactionHistoryPage.ClickSearchTransactionHistory(page);
+            await transactionHistoryPage.SearchByReferenceID(page, actualRefID);
+            const actualPaymentDate1 = await utilityLibraryPage.CalculateDateMonthDDYYYY(data.paymentDate);
+            await transactionHistoryPage.VerifyTransactionDetails(page, actualPaymentDate1, data.fromAccountNickname, data.fromAccount, data.toAccount, data.amount, data.fromAccountCurrency, "Ending in ˜");
+          });
+          await allure.step('Verify details in calendar activity history for debit account', async () => {
+            await utilityLibraryPage.SelectTab(page, 'My Accounts');
             if (data.exchangeRateType.trim().length > 0) {
               await utilityLibraryPage.VerifyInCalendarActivity('debit', actualPaymentDate, data.fromAccountNickname, data.fromAccountCurrency, calculatedAmount.toString(), data.remarks);
             }
@@ -118,16 +128,10 @@ test.describe('SIA-8|Pay Own Credit Card',  { tag: ['@E2E','@OwnCreditCardTransf
             }
 
           });
-          await allure.step('Verify details in transaction history screen by ref ID', async () => {
-            await transactionHistoryPage.OpenTransactionHistoryScreen(page, data.fromAccount);
-            await transactionHistoryPage.ClickSearchTransactionHistory(page);
-            await transactionHistoryPage.SearchByReferenceID(page, actualRefID);
-            const actualPaymentDate1 = await utilityLibraryPage.CalculateDateMonthDDYYYY(data.paymentDate);
-            await transactionHistoryPage.VerifyTransactionDetails(page, actualPaymentDate1, data.fromAccountNickname, data.fromAccount, data.toAccount, data.amount, data.fromAccountCurrency, data.remarks);
-          });
+
         }
         if (flowType === 'unhappy') {
-          if (row.Err_Popup.trim().length > 0) {
+          if (row.ErrorMessagePopup.trim().length > 0) {
             await test.step('Validate popup error message', async () => {
               await errorVerification.verifyBannerMessage(row.Err_Popup);
             });
