@@ -45,8 +45,8 @@ test.describe('Other SBM Account Transfer', { tag: ['@E2E','@OtherSBMAccountTran
 };
 
       const otp = row.OTP?.trim();
-      const popupError = row.Err_Popup?.trim();
-      const otpError = row.ErrMsg_OTP?.trim();
+      const popupError = row.ErrorMessagePopup?.trim();
+      const otpError = row.ErrorMessageOTP?.trim();
       const flowType = row.FlowType?.toLowerCase().trim();
 
       test.setTimeout(300000);
@@ -107,19 +107,19 @@ test.describe('Other SBM Account Transfer', { tag: ['@E2E','@OtherSBMAccountTran
             
             });
 
-            await allure.step('Verify details in calendar activity history for debit account', async () => {
-              const actualPaymentDate = await utilityLibraryPage.CalculateDateDDMMYYYY(data.paymentDate);
-              await waitForSpinnerToDisappear(page);
-              await utilityLibraryPage.VerifyInCalendarActivity('debit', actualPaymentDate, data.senderNickname, data.currency, data.amount, data.remarks);
-            });
             await allure.step('Verify details in transaction history screen by ref ID', async () => {
               await transactionHistoryPage.OpenTransactionHistoryScreen(page, data.senderAccount);
               await transactionHistoryPage.ClickSearchTransactionHistory(page);
               await transactionHistoryPage.SearchByReferenceID(page, actualRefID);
               const actualPaymentDate = await utilityLibraryPage.CalculateDateMonthDDYYYY(data.paymentDate);
               await transactionHistoryPage.VerifyTransactionDetails(page, actualPaymentDate, data.senderNickname, data.senderAccount, data.toAccount, data.amount, data.currency, data.remarks);
+            });            
+            await allure.step('Verify details in calendar activity history for debit account', async () => {
+              await utilityLibraryPage.SelectTab(page, 'My Accounts');
+              const actualPaymentDate = await utilityLibraryPage.CalculateDateDDMMYYYY(data.paymentDate);
+              await waitForSpinnerToDisappear(page);
+              await utilityLibraryPage.VerifyInCalendarActivity('debit', actualPaymentDate, data.senderNickname, data.currency, data.amount, data.remarks);
             });
-
             break;
           case flowType === 'unhappy':
             await allure.step('Verification of field validations', async () => {
