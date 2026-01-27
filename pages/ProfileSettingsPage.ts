@@ -300,14 +300,14 @@ export class ProfileSettingsPage {
     await expect(this.page.locator(`xpath=//h3[contains(text(),'${panelName}')]//ancestor::mat-expansion-panel`)).toHaveClass(/mat-expanded/);
   }
 
-  async SelectCurrencyAndSave(currency:string)
+  async SelectCurrencyAndSave(currencyEng:string, currencyFrench:string)
   { 
     const ddlCurrency = this.page.locator(`xpath=//mat-select[@id="BW_select_currency"]`);
     const btnSaveCurrency = this.page.locator(`xpath=//button[@id="BW_button_update_currency"]`)
 
-    if (currency.trim().length > 0) {
+    if (currencyEng.trim().length > 0) {
             await ddlCurrency.click();
-            const optionToSelect = await this.page.locator(`mat-option:has-text("${currency}")`);
+            const optionToSelect = await this.page.locator(`xpath=//mat-option[contains(text(),'${currencyEng}') or contains(text(), '${currencyFrench}')]`);
             await optionToSelect.scrollIntoViewIfNeeded();
             await optionToSelect.click();
         }
