@@ -1,0 +1,46 @@
+# ==========================================================
+# BrowserStack Playwright SDK Config
+# File: browserstack.yml  (must be at repository root)
+# ==========================================================
+
+# BrowserStack credentials are taken from env variables set in GitHub Actions
+# (browserstack/github-actions/setup-env step exports them)
+userName: ${{ secrets.BROWSERSTACK_USERNAME }}
+accessKey: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
+
+# These are also injected by setup-env step
+projectName: "SBM"
+buildName: "SBM Playwright - ${{ github.run_number }}"
+
+# Make each workflow run uniquely identifiable
+buildIdentifier: ${{ github.run_id }}
+
+# ==========================================================
+# Platforms
+# ✅ Keep only ONE platform to avoid 3 runs per scenario
+# ==========================================================
+platforms:
+  - os: Windows
+    osVersion: 10
+    browserName: Chrome
+    browserVersion: latest
+
+# ==========================================================
+# Parallelism
+# ==========================================================
+parallelsPerPlatform: 1
+
+# ==========================================================
+# BrowserStack Local
+# ==========================================================
+browserstackLocal: true
+browserStackLocalOptions:
+  localIdentifier: ${{ github.run_id }}
+
+# ==========================================================
+# Logging / Reporting
+# ==========================================================
+debug: false
+networkLogs: false
+consoleLogs: errors
+testReporting: true
