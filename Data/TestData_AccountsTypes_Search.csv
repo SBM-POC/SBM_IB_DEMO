@@ -1,9 +1,0 @@
-﻿FlowType;Description;Username;Password;AccountType;Account;Text;FromDate;ToDate;Period;TransactionType;FromAmount;ToAmount;BannerMessage
-Happy;Search in Current accounts;adam;welcome@32;CURRENT AND SAVING;00120100007144;eBanking;;;;Debit;1.00;100.00;
-Happy;Search in Current accounts;adam;welcome@32;CURRENT AND SAVING;00120100007144;eBanking;;;;Credit;1.00;100.00;
-Happy;Search in Savings accounts;adam;welcome@32;CURRENT AND SAVING;00136200092420;eBanking;;;;Debit;50.00;200.00;
-Happy;Search in Savings accounts;adam;welcome@32;CURRENT AND SAVING;00136200092420;eBanking;;;;Credit;50.00;200.00;
-Unhappy;Search in Term Deposits accounts;1169650;welcome@32;TERM DEPOSIT;50600000190111;test;;;;Debit;50.00;200.00;No Transactions Found. Please try another search. 
-Unhappy;Search in Credit Cards;1169650;welcome@32;CREDIT CARD;454695********0062;test;;;;Credit;50.00;200.00;No Transactions Found. Please try another search. 
-Unhappy;Search in Prepaid Cards;1031410;PASSWORD;PREPAID CARD;466084********9029;test;;;;Debit;50.00;200.00;No Transactions Found. Please try another search. 
-Unhappy;Search in Loan Accounts;1756278;welcome@32;LOAN;50400001245434;test;;;;Credit;50.00;200.00;No Transactions Found. Please try another search. 

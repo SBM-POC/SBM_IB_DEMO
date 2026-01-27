@@ -1,8 +1,0 @@
-scenarioName,flow,Username,Password,fromAccountNumber,currency,remittanceAmount,beneficiaryCountry,beneficiaryAccountIban,beneficiaryName,beneficiaryAddress1,beneficiaryAddress2,beneficiaryAddress3,beneficiaryBankBic,intermediaryBankBic,chargeOption,transactionDate,remarks,errorMsg
-EUR transfer within limit - BEN as charge option,positive,adam,welcome@32,00126200000413,EUR,1,Luxembourg,LU120010001234567891,Test1,Testing ,Testing ,,DEUTLULB,DEUTLULB,BEN - Beneficiary Pays All,,Test,
-EUR transfer within limit - SHA as charge option,positive,adam,welcome@32,00126200000413,EUR,1,Luxembourg,LU120010001234567891,Test2,Testing ,Testing ,,DEUTLULB,DEUTLULB,SHA - Shared Between Parties,,Test,
-EUR transfer within limit - OUR as charge option,positive,adam,welcome@32,00126200000413,EUR,1,Luxembourg,LU120010001234567891,Test3,Testing ,Testing ,,DEUTLULB,DEUTLULB,OUR - Ordering Party Pays All,,Test,
-Special character in remarks ,negative,adam,welcome@32,00126200000413,EUR,1,Luxembourg,LU120010001234567891,Test4,Testing ,Testing ,,DEUTLULB,DEUTLULB,BEN - Beneficiary Pays All,,$$$$$$$,
-EUR transfer exceed transfer limit ,negative,adam,welcome@32,00126200000413,EUR,2000,Luxembourg,LU120010001234567891,Test5,Testing ,Testing ,,DEUTLULB,DEUTLULB,BEN - Beneficiary Pays All,,Test,Daily limit Exceeded 
-Amount entered more than available balance ,negative,adam,welcome@32,00126200000413,EUR ,50000900,Luxembourg,LU120010001234567891,Test6,Testing ,Testing ,,DEUTLULB,DEUTLULB,BEN - Beneficiary Pays All,,Test,Amount cannot be greater than available balance
-Special character in amount,negative,adam,welcome@32,00126200000413,EUR ,$$$$$$$,Luxembourg,LU120010001234567891,Test7,Testing ,Testing ,,DEUTLULB,DEUTLULB,BEN - Beneficiary Pays All,,Test,

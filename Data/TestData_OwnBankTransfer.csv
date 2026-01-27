@@ -1,9 +1,0 @@
-ScenarioName,flow,Username,Password,fromAccount,toAccount,currency,amount,remarks,Frequency ,expectedErrorsType,expectedErrors
-Transfer from a MUR account to a MUR account,positive,adam,welcome@32,00120100007144,00136200092420,MUR,100,Test,,,
-Transfer from a FCY account to a FCY account,positive,adam,welcome@32,00126200000413,50100000617170,AUD,10,Test,,,
-Transfer from a FCY account to a MUR account,positive,adam,welcome@32,00126200000413,00120100007144,MUR,10,Test,,,
-Transfer for a recurring transaction of a MUR account to MUR account,positive ,adam,welcome@32,00120100007144,00136200092420,MUR,100,Test,Daily,,
-Transfer for a MUR account to FCY account,positive,adam,welcome@32,00120100007144,00126200000413,EUR,10,Test,,,
-Checking Blank fields error messages,negative,adam,welcome@32,00120100007144,,,,,,inline,Select a Beneficiary account | Amount is required | Remarks is required
-Exceed account balance and receive an error message ,negative,adam,welcome@32,00120100007144,00136200092420,,5176919.96,Test,,inline,Amount cannot be greater than available balance
-Exceed limit ,negative,adam,welcome@32,00120100007144,00136200092420,MUR,101000,Test,,popup,The transaction amount exceeds the allowed limit per transaction. The transaction cannot be completed.
