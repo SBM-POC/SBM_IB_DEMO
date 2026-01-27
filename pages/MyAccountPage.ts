@@ -28,7 +28,7 @@ export class MyAccount {
   async assertMyAccountTabActive(): Promise<void> {
     await expect(this.myAccountTab).toBeVisible();
     await expect(this.myAccountTab).toHaveClass(/active/);
-    await waitForSpinnerToDisappear(this.page);
+    //await waitForSpinnerToDisappear(this.page);
   }
 
   async logout(): Promise<void> {
