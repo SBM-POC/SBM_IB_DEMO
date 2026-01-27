@@ -40,7 +40,8 @@ browserStackLocalOptions:
 # ==========================================================
 # Logging / Reporting
 # ==========================================================
-debug: false
-networkLogs: false
+debug: true
+networkLogs: true
 consoleLogs: errors
+
 testReporting: true
