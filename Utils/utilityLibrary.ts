@@ -123,31 +123,27 @@ export class utilityLibrary {
     async SelectTab(page: Page, tabName: string, timeout = 15000) {
         switch (tabName) {
             case "My Accounts":
-                const myaccTab = await page.locator(`xpath=//app-nav-bar//li[contains(@id,'retail-home_hor')]//a//span[contains(text(),'My Accounts')]`);
+                const myaccTab = this.page.locator(`xpath=//app-nav-bar//li[contains(@id,'retail-home_hor')]//a//span[contains(text(),'My Accounts')]`);
                 await myaccTab.waitFor({ state: 'visible' });
                 await myaccTab.click();
-                await waitForSpinnerToDisappear(page);               
                 await page.locator(`xpath=//h1[contains(normalize-space(.),'Dashboard')]`).waitFor({ state: 'visible', timeout});
                 break;
             case "Pay & Transfer":
-                const payTransferTab = await page.locator(`xpath=//app-nav-bar//li[contains(@id,'TRANSACTIONS_hor')]//a//span[contains(text(),'Pay & Transfer')]`);
+                const payTransferTab = this.page.locator(`xpath=//app-nav-bar//li[contains(@id,'TRANSACTIONS_hor')]//a//span[contains(text(),'Pay & Transfer')]`);
                 await payTransferTab.waitFor({ state: 'visible' });
                 await payTransferTab.click();
-                await waitForSpinnerToDisappear(page);
                 await page.locator(`xpath= //app-nav-bar//li[contains(@id,'TRANSACTIONS_hor')]//ul[contains(@class,'sub-menu')]`).waitFor({ state: 'visible' });
                 break;
             case "Service Request":
-            const serviceReqTab = await page.locator(`xpath=//app-nav-bar//li[contains(@id,'SERVICE_REQUEST_hor')]//a//span[contains(text(),'Service Request')]`);
+            const serviceReqTab = this.page.locator(`xpath=//app-nav-bar//li[contains(@id,'SERVICE_REQUEST_hor')]//a//span[contains(text(),'Service Request')]`);
             await serviceReqTab.waitFor({ state: 'visible' });
             await serviceReqTab.click();
-            await waitForSpinnerToDisappear(page);
             await page.locator(`xpath= //app-nav-bar//li[contains(@id,'SERVICE_REQUEST_hor')]//ul[contains(@class,'sub-menu')]`).waitFor({ state: 'visible' });
             break;
             case "Settings":
-                const settingsTab = await page.locator(`xpath=//app-nav-bar//li[contains(@id,'SETTINGS_hor')]`);
+                const settingsTab = this.page.locator(`xpath=//app-nav-bar//li[contains(@id,'SETTINGS_hor')]`);
                 await settingsTab.waitFor({ state: 'visible' });
                 await settingsTab.click();
-                await waitForSpinnerToDisappear(page);
                 await page.locator(`xpath= //app-nav-bar//li[contains(@id,'SETTINGS_hor')]//ul[contains(@class,'sub-menu')]`).waitFor({ state: 'visible' });
             break;
         }
