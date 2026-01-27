@@ -1,6 +1,4 @@
 ScenarioName,PaymentName,BankIdentifier,TransferType,FromAccount,Amount,Currency,ChargeOption,Username,Password,Remarks
-<<<<<<< HEAD
-<<<<<<< HEAD
 QuickPay - SBM,Isha Monthly,Other SBM Account Transfer,Normal,00130100000265- Overdraft,12,MUR,,1169650,Test@1234,QuickPay
 QuickPay - Local Normal,Rajesh Local Pay,Other Local Bank Transfer,Normal,00120100026407,100,MUR,,1197301,Test@1234,QuickPay
 QuickPay - Local MACSS,Rajesh MACSS Acc,Other Local Bank Transfer,MACSS,00120100026407,150,MUR,,1197301,Test@1234,QuickPay
@@ -8,15 +6,3 @@ QuickPay - Local Instant,Rajesh Instant Pay,Other Local Bank Transfer,Instant,00
 QuickPay - SWIFT,Rajesh SWIFT Basic,SWIFT Transfer,Normal,00130100000265- Overdraft,50,USD,OUR,1197301,Test@1234,QuickPay
 QuickPay other SBM Account Transfer,Isha Monthly,Other SBM Account Transfer,Normal,00130100000265 - Overdraft,12.00,MUR,,1169650,Test@1234,QuickPay toggle + pay
 QuickPay other SBM Account Transfer,Ashveen,Other SBM Account Transfer,Normal,00130100000265 - Overdraft,120,MUR,,1169650,Test@1234,QuickPay toggle + pay
-=======
-=======
->>>>>>> 80ecdb0d1bf9280191c1b88d50ffd9b78dc1eff4
-QuickPay - SBM,Isha Monthly 1,Other SBM Account Transfer,Normal,00130100000265- Overdraft,12,MUR,,1169650,Test$1234,QuickPay
-QuickPay - Local Normal,Rajesh Local Pay,Other Local Bank Transfer,Normal,00120100026407,100,MUR,,1197301,Test@1234,QuickPay
-QuickPay - Local MACSS,Rajesh MACSS Acc,Other Local Bank Transfer,MACSS,00120100026407,150,MUR,,1197301,Test@1234,QuickPay
-QuickPay - Local Instant,Rajesh Instant Pay,Other Local Bank Transfer,Instant,00120100026407,300,MUR,,1197301,Test@1234,QuickPay
-QuickPay - SWIFT,Rajesh SWIFT Basic,SWIFT Transfer,Normal,00130100000265- Overdraft,50,USD,OUR,1197301,Test@1234,QuickPay
-QuickPay other SBM Account Transfer,Isha Monthly,Other SBM Account Transfer,Normal,00130100000265 - Overdraft,12.00,MUR,,1169650,welcome@12,QuickPay toggle + pay
-QuickPay other SBM Account Transfer,Ashveen,Other SBM Account Transfer,Normal,00130100000265 - Overdraft,120,MUR,,1169650,welcome@12,QuickPay toggle + pay
->>>>>>> 80ecdb0 (Changes made to My beneficiaries and Quickpay)
-
